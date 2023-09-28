@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "express": "^4.18.2",
-    "inquirer": "^8.2.4"
+    "inquirer": "^8.2.4",
+    "mysql2": "^3.6.1"
   },
   "scripts": {
     "start": "node server.js"
@@ -10,7 +11,6 @@
   "description": "a command line app that manages a company's employee database, using Node.js, Inquirer, and MySQL",
   "version": "1.0.0",
   "main": "server.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/milena-allaway/employee_tracker.git"
