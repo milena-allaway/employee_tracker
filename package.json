@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+    "express": "^4.18.2",
+    "inquirer": "^8.2.4"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "employee_tracker",
+  "description": "a command line app that manages a company's employee database, using Node.js, Inquirer, and MySQL",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milena-allaway/employee_tracker.git"
+  },
+  "keywords": [
+    "mysql",
+    "node.js",
+    "express.js",
+    "employee",
+    "tracker",
+    "inquirer"
+  ],
+  "author": "Milena Allaway",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/milena-allaway/employee_tracker/issues"
+  },
+  "homepage": "https://github.com/milena-allaway/employee_tracker#readme"
+}
