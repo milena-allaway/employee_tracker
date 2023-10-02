@@ -4,7 +4,7 @@ VALUES
     ('002','Hogwarts_Student'),
     ('003','Ministry_of_Magic');
 
-INSERT INTO role (id, title, salary, department_id)
+INSERT INTO roles (id, title, salary, department_id)
 VALUES
     ('001','Headmaster', 100000, '001'),
     ('002','Professor', 80000, '001'),
@@ -15,7 +15,7 @@ VALUES
     ('007','Ghost', 0, '001'),
     ('008', 'Ministry_Worker', 75000, '003');
 
-INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
+INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
 VALUES
     ('001','Cornelius','Fudge','004','001'), -- minister of magic --
     ('002','Albus','Dumbledore','001','001'), -- headmaster --
