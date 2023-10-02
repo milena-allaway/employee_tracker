@@ -2,7 +2,8 @@
 const express = require('express');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
-
+//https://www.npmjs.com/package/console.table?activeTab=dependents
+const cTable = require('console.table');
 // set up port
 const PORT = process.env.PORT || 3001;
 
@@ -68,7 +69,8 @@ init = () => {
                 case "Exit":
                     db.end();
                     (console.log("Goodbye!"));
-                    break;
+                    process.exit();
+
             
             };
         });
@@ -77,7 +79,7 @@ init = () => {
 // function to view all departments
 viewDepartments = () => {
     db.query('SELECT * FROM departments', function (err, results) {
-        console.log(results);
+        console.table('Departments: ', results);
         init();
     });
 };
@@ -85,7 +87,7 @@ viewDepartments = () => {
 // function to view all roles
 viewRoles = () => {
     db.query('SELECT * FROM roles', function (err, results) {
-        console.log(results);
+        console.table('Roles: ', results);
         init();
     });
 };
@@ -93,26 +95,111 @@ viewRoles = () => {
 // function to view all employees
 viewEmployees = () => {
     db.query('SELECT * FROM employees', function (err, results) {
-        console.log(results);
+        console.table('Employees: ', results);
         init();
     });
 };
 
-// function to add a department
-// addDepartment = () => {
-//     inquirer.prompt(
-//         {
-//             type: 'input',
-//             name: 'name',
-//             message: 'What is the name of the department?',
-//         })
-//         .then((response) => {
-//             db.query('INSERT INTO departments (name) VALUES (?)', response.name, function (err, results) {
-//                 console.log(results);
-//                 init();
-//             });
-//         });
-// };
+//function to add a department
+addDepartment = () => {
+    inquirer.prompt(
+        {
+            type: 'input',
+            name: 'name',
+            message: 'What is the name of the department?',
+        })
+        .then((response) => {
+            db.query('INSERT INTO departments (name) VALUES (?)', response.name, function (err, results) {
+                console.table('Departments: ', results);
+                console.log('Department added!');
+                init();
+            });
+        });
+};
+
+//function to add a role
+addRole = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'What is the title of the role?',
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'What is the salary of the role?',
+        },
+        {
+            type: 'input',
+            name: 'department_id',
+            message: 'What is the department id of the role? (Staff = 001, Student = 002, Ministry = 003)',
+        }
+    ])
+        .then((response) => {
+            db.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', [response.title, response.salary, response.department_id], function (err, results) {
+                console.table('Roles: ', results);
+                console.log('Role added!');
+                init();
+            });
+        });
+};
+
+//function to add an employee
+addEmployee = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'What is the first name of the employee?',
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'What is the last name of the employee?',
+        },
+        {
+            type: 'input',
+            name: 'role_id',
+            message: 'What is the role id of the employee? (Headmaster = 001, Professor = 002, Student = 003, Ghost = 007, Ministry Worker = 008',
+        },
+        {
+            type: 'input',
+            name: 'manager_id',
+            message: 'What is the manager id of the employee?',
+        }
+    ])
+        .then((response) => {
+            db.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [response.first_name, response.last_name, response.role_id, response.manager_id], function (err, results) {
+                console.table('Employees: ', results);
+                console.log('Employee added!');
+                init();
+            });
+        });
+};
+
+//function to update an employee
+updateEmployee = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'employee_id',
+            message: 'What is the id of the employee you would like to update?',
+        },
+        {
+            type: 'input',
+            name: 'role_id',
+            message: 'What is the new role id of the employee? (Headmaster = 001, Professor = 002, Student = 003, Ghost = 007, Ministry Worker = 008',
+        }
+    ])
+        .then((response) => {
+            db.query('UPDATE employees SET role_id = ? WHERE id = ?', [response.role_id, response.employee_id], function (err, results) {
+                console.table('Employees: ', results);
+                console.log('Employee updated!');
+                init();
+            });
+        });
+};
 
 
 // Default response for any other request (Not Found)
