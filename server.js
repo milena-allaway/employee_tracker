@@ -19,9 +19,9 @@ const db = mysql.createConnection(
       host: 'localhost',
       user: 'root',
       password: 'P@ssword123',
-      database: 'business_db'
+      database: 'hogwarts_db'
     },
-    console.log(`Connected to the business_db database.`)
+    console.log(`Connected to the hogwarts_db database.`)
 );
 
 // Default response for any other request (Not Found)
@@ -29,7 +29,7 @@ app.use((req, res) => {
     res.status(404).end();
 });
  
-// Start server connection
+// Listener to start server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
