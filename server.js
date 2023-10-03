@@ -86,7 +86,7 @@ viewDepartments = () => {
 
 // function to view all roles
 viewRoles = () => {
-    db.query('SELECT * FROM roles', function (err, results) {
+    db.query('SELECT roles.id, roles.title AS job_title, departments.name AS department_name, roles.salary FROM roles JOIN departments ON roles.department_id = departments.id', function (err, results) {
         console.table('Roles: ', results);
         init();
     });
