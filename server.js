@@ -79,6 +79,7 @@ init = () => {
 // function to view all departments
 viewDepartments = () => {
     db.query('SELECT * FROM departments', function (err, results) {
+        if (err) throw err;
         console.table('Departments: ', results);
         init();
     });
@@ -88,6 +89,7 @@ viewDepartments = () => {
 viewRoles = () => {
     db.query(`SELECT roles.id, roles.title AS job_title, departments.name AS department_name,
      roles.salary FROM roles JOIN departments ON roles.department_id = departments.id`, function (err, results) {
+        if (err) throw err;
         console.table('Roles: ', results);
         init();
     });
@@ -102,6 +104,7 @@ viewEmployees = () => {
     LEFT JOIN roles ON employees.role_id = roles.id
     LEFT JOIN departments ON roles.department_id = departments.id
     LEFT JOIN employees AS managers ON employees.manager_id = managers.id`, function (err, results) {
+        if (err) throw err;
         console.table('Employees: ', results);
         init();
     });
@@ -117,7 +120,8 @@ addDepartment = () => {
         })
         .then((response) => {
             db.query('INSERT INTO departments (name) VALUES (?)', response.name, function (err, results) {
-                console.log('Department added! Here is the updated table:');
+                if (err) throw err;
+                console.log('Department added! Here is the updated table.');
                 viewDepartments();
             });
         });
@@ -125,30 +129,43 @@ addDepartment = () => {
 
 //function to add a role
 addRole = () => {
-    inquirer.prompt([
-        {
-            type: 'input',
-            name: 'title',
-            message: 'What is the title of the role?',
-        },
-        {
-            type: 'input',
-            name: 'salary',
-            message: 'What is the salary of the role?',
-        },
-        {
-            type: 'input',
-            name: 'department_id',
-            message: 'What is the department id of the role? (Staff = 001, Student = 002, Ministry = 003)',
-        }
-    ])
+    db.query('SELECT id, name FROM departments', function (err, departments) {
+        if (err) throw err;
+
+        // Extract department names and IDs to populate choices array
+        //https://www.w3schools.com/jsref/jsref_map.asp
+       //used chatGPT to help write and test departmentChoices code
+        const departmentChoices = departments.map(department => ({
+            name: department.name,
+            value: department.id
+        }));
+
+        inquirer.prompt([
+            {
+                type: 'input',
+                name: 'title',
+                message: 'What is the title of the role?',
+            },
+            {
+                type: 'input',
+                name: 'salary',
+                message: 'What is the salary of the role?',
+            },
+            {
+                type: 'list',
+                name: 'department_id',
+                message: 'Select the department for the role:',
+                choices: departmentChoices,
+            }
+        ])
         .then((response) => {
             db.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', [response.title, response.salary, response.department_id], function (err, results) {
-                console.table('Roles: ', results);
-                console.log('Role added!');
-                init();
+                if (err) throw err;
+                console.log('Role added! Here is the updated table.');
+                viewRoles();
             });
         });
+    });
 };
 
 //function to add an employee
@@ -177,6 +194,7 @@ addEmployee = () => {
     ])
         .then((response) => {
             db.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [response.first_name, response.last_name, response.role_id, response.manager_id], function (err, results) {
+                if (err) throw err;
                 console.table('Employees: ', results);
                 console.log('Employee added!');
                 init();
@@ -200,6 +218,7 @@ updateEmployee = () => {
     ])
         .then((response) => {
             db.query('UPDATE employees SET role_id = ? WHERE id = ?', [response.role_id, response.employee_id], function (err, results) {
+                if (err) throw err;
                 console.table('Employees: ', results);
                 console.log('Employee updated!');
                 init();
