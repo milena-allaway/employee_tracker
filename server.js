@@ -113,13 +113,12 @@ addDepartment = () => {
         {
             type: 'input',
             name: 'name',
-            message: 'What is the name of the department?',
+            message: 'What is the new department name?',
         })
         .then((response) => {
             db.query('INSERT INTO departments (name) VALUES (?)', response.name, function (err, results) {
-                console.table('Departments: ', results);
-                console.log('Department added!');
-                init();
+                console.log('Department added! Here is the updated table:');
+                viewDepartments();
             });
         });
 };
