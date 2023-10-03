@@ -86,15 +86,22 @@ viewDepartments = () => {
 
 // function to view all roles
 viewRoles = () => {
-    db.query('SELECT roles.id, roles.title AS job_title, departments.name AS department_name, roles.salary FROM roles JOIN departments ON roles.department_id = departments.id', function (err, results) {
+    db.query(`SELECT roles.id, roles.title AS job_title, departments.name AS department_name,
+     roles.salary FROM roles JOIN departments ON roles.department_id = departments.id`, function (err, results) {
         console.table('Roles: ', results);
         init();
     });
 };
 
 // function to view all employees
+// concatinate first and last name https://stackoverflow.com/questions/3757723/how-to-combine-multiple-columns-as-one-and-format-with-custom-strings
 viewEmployees = () => {
-    db.query('SELECT * FROM employees', function (err, results) {
+    db.query(`SELECT employees.id, employees.first_name, employees.last_name, roles.title AS job_title, 
+    departments.name AS department_name, roles.salary, CONCAT(managers.first_name, ' , ', managers.last_name) AS manager_name 
+    FROM employees 
+    LEFT JOIN roles ON employees.role_id = roles.id
+    LEFT JOIN departments ON roles.department_id = departments.id
+    LEFT JOIN employees AS managers ON employees.manager_id = managers.id`, function (err, results) {
         console.table('Employees: ', results);
         init();
     });
