@@ -44,6 +44,7 @@ After installing the dependencies by running `npm install`, run `node server.js`
 - ChatGPT for helping me troubleshoot the code.
 - My instructor, Edward Apostol, for guiding me on how to go about extracting data from the tables and using it to populate the lists in the command prompt.
 - The BCS module 12 exercises were referenced for everything except the console.table and asciiart-logo NPM packages.
+- GitHub copilot for helping me write the code and providing me with the correct syntax for the MySQL queries and validating the code.
 
 ## License
   This project is licensed under the [MIT License](https://opensource.org/licenses/MIT)
