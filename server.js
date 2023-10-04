@@ -42,7 +42,7 @@ init = () => {
                 "Add an employee",
                 "Update an employee role",
                 "View utilized budget of a department",
-                "Delete",
+                "Delete department, role, or employee",
                 "Exit",
                 ],
         })
@@ -154,11 +154,27 @@ addRole = () => {
                 type: 'input',
                 name: 'title',
                 message: 'What is the title of the role?',
+                validate: (titleInput) => {
+                    if (titleInput) {
+                        return true;
+                    } else {
+                        console.log('Please enter a title for the role!');
+                        return false;
+                    }
+                }
             },
             {
                 type: 'input',
                 name: 'salary',
                 message: 'What is the salary of the role?',
+                validate: (salaryInput) => {
+                    if (salaryInput) {
+                        return true;
+                    } else {
+                        console.log('Please enter a salary for the role!');
+                        return false;
+                    }
+                }
             },
             {
                 type: 'list',
@@ -201,11 +217,27 @@ addEmployee = () => {
                 type: 'input',
                 name: 'first_name',
                 message: 'What is the first name of the employee?',
+                validate: (firstNameInput) => {
+                    if (firstNameInput) {
+                        return true;
+                    } else {
+                        console.log('Please enter a first name for the employee!');
+                        return false;
+                    }
+                }
             },
             {
                 type: 'input',
                 name: 'last_name',
                 message: 'What is the last name of the employee?',
+                validate: (lastNameInput) => {
+                    if (lastNameInput) {
+                        return true;
+                    } else {
+                        console.log('Please enter a last name for the employee!');
+                        return false;
+                    }
+                }
             },
             {
                 type: 'list',
