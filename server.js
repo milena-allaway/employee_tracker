@@ -44,8 +44,8 @@ app.use(express.json());
 const db = mysql.createConnection(
     {
       host: 'localhost',
-      user: 'root',
-      password: 'P@ssword123',
+      user: 'root', //add your mysql username here
+      password: 'P@ssword123', //add your mysql password here
       database: 'hogwarts_db'
     },
     console.log(`Connected to the hogwarts_db database.`)
@@ -113,6 +113,7 @@ init = () => {
 
 // function to view all departments
 viewDepartments = () => {
+    //fetch all departments
     db.query('SELECT * FROM departments', function (err, results) {
         if (err) throw err;
         console.table('Departments: ', results);
@@ -122,6 +123,7 @@ viewDepartments = () => {
 
 // function to view all roles
 viewRoles = () => {
+    //fetch all roles and join with departments table
     db.query(`SELECT roles.id, roles.title AS job_title, departments.name AS department_name,
      roles.salary FROM roles JOIN departments ON roles.department_id = departments.id`, function (err, results) {
         if (err) throw err;
@@ -133,6 +135,7 @@ viewRoles = () => {
 // function to view all employees
 // concatinate first and last name https://stackoverflow.com/questions/3757723/how-to-combine-multiple-columns-as-one-and-format-with-custom-strings
 viewEmployees = () => {
+    //fetch all employees, roles, departments, and managers and join tables
     db.query(`SELECT employees.id, employees.first_name, employees.last_name, roles.title AS job_title, 
     departments.name AS department_name, roles.salary, CONCAT(managers.first_name, ' , ', managers.last_name) AS manager_name 
     FROM employees 
@@ -146,6 +149,7 @@ viewEmployees = () => {
 };
 
 //function to add a department
+// https://emojicombos.com/magic used for cute magic emoji in console logs
 addDepartment = () => {
     inquirer.prompt(
         {
@@ -154,9 +158,10 @@ addDepartment = () => {
             message: 'What is the new department name?',
         })
         .then((response) => {
+            // Insert new department into departments table
             db.query('INSERT INTO departments (name) VALUES (?)', response.name, function (err, results) {
                 if (err) throw err;
-                console.log('Department added! Here is the updated table.');
+                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Department added! Here is the updated table.');
                 viewDepartments();
             });
         });
@@ -164,6 +169,7 @@ addDepartment = () => {
 
 //function to add a role
 addRole = () => {
+    // Fetch department names and IDs
     db.query('SELECT id, name FROM departments', function (err, departments) {
         if (err) throw err;
 
@@ -210,9 +216,10 @@ addRole = () => {
             }
         ])
         .then((response) => {
+            // Insert new role into roles table
             db.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', [response.title, response.salary, response.department_id], function (err, results) {
                 if (err) throw err;
-                console.log('Role added! Here is the updated table.');
+                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Role added! Here is the updated table.');
                 viewRoles();
             });
         });
@@ -221,6 +228,7 @@ addRole = () => {
 
 //function to add an employee
 addEmployee = () => {
+    // Fetch role titles and IDs
     db.query('SELECT id, title FROM roles', function (err, roles) {
         if (err) throw err;
         // Extract role titles and IDs for choices array
@@ -228,7 +236,7 @@ addEmployee = () => {
             name: role.title,
             value: role.id
         }));
-    
+        // Fetch employee names and IDs, concatinate first and last name and alias as full_name
         db.query('SELECT id, CONCAT(first_name, " ", last_name) AS full_name FROM employees', function (err, employees) {
             if (err) throw err;
 
@@ -279,9 +287,10 @@ addEmployee = () => {
             }
         ])
         .then((response) => {
+            // Insert new employee into employees table
             db.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [response.first_name, response.last_name, response.role_id, response.manager_id], function (err, results) {
                 if (err) throw err;
-                console.log('Employee added! Here is the updated table.');
+                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Employee added! Here is the updated table.');
                 viewEmployees();
             });
         })
@@ -291,6 +300,7 @@ addEmployee = () => {
 
 //function to update an employee
 updateEmployee = () => {
+    // Fetch employee names and IDs, concatinate first and last name and alias as full_name
     db.query('SELECT id, CONCAT(first_name, " ", last_name) AS full_name FROM employees', function (err, employees) {
         if (err) throw err;
 
@@ -300,7 +310,7 @@ updateEmployee = () => {
             value: employee.id
         }));
 
-        //Fetch role titles and IDs for choices array
+        //Fetch role titles and IDs
         db.query('SELECT id, title FROM roles', function (err, roles) {
             if (err) throw err;
 
@@ -325,9 +335,10 @@ updateEmployee = () => {
             }
         ])
         .then((response) => {
+            // Update employee in employees table
             db.query('UPDATE employees SET role_id = ? WHERE id = ?', [response.role_id, response.employee_id], function (err, results) {
                 if (err) throw err;
-                console.log('Employee updated! Here is the updated table.');
+                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Employee updated! Here is the updated table.');
                 viewEmployees();
             });
         });
@@ -337,9 +348,10 @@ updateEmployee = () => {
 
 //function to view budget
 viewBudget = () => {
+    // Fetch department names and IDs
     db.query('SELECT id, name FROM departments', function (err, departments) {
         if (err) throw err;
-
+        // Extract department names and IDs to populate choices array
         const departmentChoices = departments.map(department => ({
             name: department.name,
             value: department.id
@@ -353,6 +365,7 @@ viewBudget = () => {
                 choices: departmentChoices,
             })
         .then((response) => {
+            // Fetch sum of salaries for selected department
             db.query('SELECT SUM(salary) AS total_salary FROM roles WHERE department_id = ?', response.department_id, function (err, results) {
                 if (err) throw err;
                 console.table('Budget: ', results);
@@ -362,6 +375,7 @@ viewBudget = () => {
     });
 };
 
+//function to start delete options prompt
 deletePrompt = () => {
     inquirer.prompt(
         {
@@ -396,6 +410,7 @@ deletePrompt = () => {
 
 //function to delete a department
 deleteDepartment = () => {
+    // Fetch department names and IDs
     db.query('SELECT id, name FROM departments', function (err, departments) {
         if (err) throw err;
 
@@ -414,9 +429,10 @@ deleteDepartment = () => {
             }
         ])
         .then((response) => {
+            // Delete department from departments table
             db.query('DELETE FROM departments WHERE id = ?', response.id, function (err, results) {
                 if (err) throw err;
-                console.log('Department deleted! Here is the updated table.');
+                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Department deleted! Here is the updated table.');
                 viewDepartments();
             });
         });
@@ -425,6 +441,7 @@ deleteDepartment = () => {
 
 //function to delete a role
 deleteRole = () => {
+    // Fetch role titles and IDs
     db.query('SELECT id, title FROM roles', function (err, roles) {
         if (err) throw err;
 
@@ -443,9 +460,10 @@ deleteRole = () => {
             }
         ])
         .then((response) => {
+            // Delete role from roles table
             db.query('DELETE FROM roles WHERE id = ?', response.id, function (err, results) {
                 if (err) throw err;
-                console.log('Role deleted! Here is the updated table.');
+                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Role deleted! Here is the updated table.');
                 viewRoles();
             });
         });
@@ -454,6 +472,7 @@ deleteRole = () => {
 
 //function to delete an employee
 deleteEmployee = () => {
+    // Fetch employee names and IDs, concatinate first and last name and alias as full_name
     db.query('SELECT id, CONCAT(first_name, " ", last_name) AS full_name FROM employees', function (err, employees) {
         if (err) throw err;
 
@@ -472,9 +491,10 @@ deleteEmployee = () => {
             }
         ])
         .then((response) => {
+            // Delete employee from employees table
             db.query('DELETE FROM employees WHERE id = ?', response.id, function (err, results) {
                 if (err) throw err;
-                console.log('Employee deleted! Here is the updated table.');
+                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Employee deleted! Here is the updated table.');
                 viewEmployees();
             });
         });
@@ -488,7 +508,8 @@ app.use((req, res) => {
  
 // Listener to start server after DB connection
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`
+    Server running on port ${PORT}`);
 });
 //start app
 init();
