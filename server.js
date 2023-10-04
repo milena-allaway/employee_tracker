@@ -4,6 +4,32 @@ const mysql = require('mysql2');
 const inquirer = require('inquirer');
 //https://www.npmjs.com/package/console.table?activeTab=dependents
 const cTable = require('console.table');
+
+//customizable logo for app
+//https://www.npmjs.com/package/asciiart-logo
+const logo = require('asciiart-logo');
+const longText = 'Welcome to the Hogwarts Management System!' + 
+    '\n' + "This is a simple command line app that manages a company's employee database." +
+    '\n' + 'Please select an option from the menu below to get started.';
+
+console.log(
+    logo({
+        name: 'Hogwarts Management System',
+        font: 'Standard',
+        lineChars: 12,
+        padding: 5,
+        margin: 2,
+        borderColor: 'blue',
+        logoColor: 'yellow',
+        textColor: 'cyan',
+    })
+    .emptyLine()
+    .right('version 1.0.0')
+    .emptyLine()
+    .center(longText)
+    .render()
+);
+
 // set up port
 const PORT = process.env.PORT || 3001;
 
