@@ -27,6 +27,7 @@ const db = mysql.createConnection(
 
 // function to initialize app
 init = () => {
+    // prompt user for action
     inquirer.prompt(
         {
             type: 'list',
@@ -40,6 +41,8 @@ init = () => {
                 "Add a role",
                 "Add an employee",
                 "Update an employee role",
+                "View utilized budget of a department",
+                "Delete",
                 "Exit",
                 ],
         })
@@ -65,6 +68,12 @@ init = () => {
                     break;
                 case "Update an employee role":
                     updateEmployee();
+                    break;
+                case "View utilized budget of a department":
+                    viewBudget();
+                    break;
+                case "Delete department, role, or employee":
+                    deletePrompt();
                     break;
                 case "Exit":
                     db.end();
@@ -134,7 +143,7 @@ addRole = () => {
 
         // Extract department names and IDs to populate choices array
         //https://www.w3schools.com/jsref/jsref_map.asp
-       //used chatGPT to help write and test departmentChoices code
+       //used chatGPT to help write and test departmentChoices code, used as a template for other choices
         const departmentChoices = departments.map(department => ({
             name: department.name,
             value: department.id
@@ -266,6 +275,152 @@ updateEmployee = () => {
         });
     });
 });
+};
+
+//function to view budget
+viewBudget = () => {
+    db.query('SELECT id, name FROM departments', function (err, departments) {
+        if (err) throw err;
+
+        const departmentChoices = departments.map(department => ({
+            name: department.name,
+            value: department.id
+        }));
+
+        inquirer.prompt(
+            {
+                type: 'list',
+                name: 'department_id',
+                message: 'Select the department to view budget:',
+                choices: departmentChoices,
+            })
+        .then((response) => {
+            db.query('SELECT SUM(salary) AS total_salary FROM roles WHERE department_id = ?', response.department_id, function (err, results) {
+                if (err) throw err;
+                console.table('Budget: ', results);
+                init();
+            });
+        });
+    });
+};
+
+deletePrompt = () => {
+    inquirer.prompt(
+        {
+            type: 'list',
+            name: 'action',
+            message: 'What would you like to delete?',
+            choices:
+                ["Delete a department",
+                "Delete a role",
+                "Delete an employee",
+                "Exit",
+                ],
+        })
+        .then((response) => {
+            switch (response.action) {
+                case "Delete a department":
+                    deleteDepartment();
+                    break;
+                case "Delete a role":
+                    deleteRole();
+                    break;
+                case "Delete an employee":
+                    deleteEmployee();
+                    break;
+                case "Exit":
+                    db.end();
+                    (console.log("Goodbye!"));
+                    process.exit();
+            };
+        });
+};
+
+//function to delete a department
+deleteDepartment = () => {
+    db.query('SELECT id, name FROM departments', function (err, departments) {
+        if (err) throw err;
+
+        // Extract department names and IDs to populate choices array
+        const departmentChoices = departments.map(department => ({
+            name: department.name,
+            value: department.id
+        }));
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'id',
+                message: 'Select the department to delete:',
+                choices: departmentChoices,
+            }
+        ])
+        .then((response) => {
+            db.query('DELETE FROM departments WHERE id = ?', response.id, function (err, results) {
+                if (err) throw err;
+                console.log('Department deleted! Here is the updated table.');
+                viewDepartments();
+            });
+        });
+    });
+};
+
+//function to delete a role
+deleteRole = () => {
+    db.query('SELECT id, title FROM roles', function (err, roles) {
+        if (err) throw err;
+
+        // Extract role titles and IDs for choices array
+        const roleChoices = roles.map(role => ({
+            name: role.title,
+            value: role.id
+        }));
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'id',
+                message: 'Select the role to delete:',
+                choices: roleChoices,
+            }
+        ])
+        .then((response) => {
+            db.query('DELETE FROM roles WHERE id = ?', response.id, function (err, results) {
+                if (err) throw err;
+                console.log('Role deleted! Here is the updated table.');
+                viewRoles();
+            });
+        });
+    });
+};
+
+//function to delete an employee
+deleteEmployee = () => {
+    db.query('SELECT id, CONCAT(first_name, " ", last_name) AS full_name FROM employees', function (err, employees) {
+        if (err) throw err;
+
+        // Extract employee names and IDs for choices array
+        const employeeChoices = employees.map(employee => ({
+            name: employee.full_name,
+            value: employee.id
+        }));
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'id',
+                message: 'Select the employee to delete:',
+                choices: employeeChoices,
+            }
+        ])
+        .then((response) => {
+            db.query('DELETE FROM employees WHERE id = ?', response.id, function (err, results) {
+                if (err) throw err;
+                console.log('Employee deleted! Here is the updated table.');
+                viewEmployees();
+            });
+        });
+    });
 };
 
 // Default response for any other request (Not Found)

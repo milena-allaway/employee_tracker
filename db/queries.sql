@@ -1,5 +1,5 @@
-SELECT * FROM departments
+-- SELECT * FROM departments
 
-SELECT * FROM roles
+-- SELECT * FROM roles
 
-SELECT * FROM employees
+-- SELECT * FROM employees
