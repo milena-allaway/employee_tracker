@@ -17,7 +17,7 @@ VALUES
 
 INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
 VALUES
-    ('001','Cornelius','Fudge','004','001'), -- minister of magic --
+    ('001','Cornelius','Fudge','004', NULL), -- minister of magic --
     ('002','Albus','Dumbledore','001','001'), -- headmaster --
     ('003','Severus','Snape','002','002'), -- head of slytherin --
     ('004','Minerva','McGonagall','002','002'), -- head of gryffindor --
