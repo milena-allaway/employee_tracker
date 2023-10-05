@@ -9,10 +9,10 @@ VALUES
     ('001','Headmaster', 100000, '001'),
     ('002','Professor', 80000, '001'),
     ('003','Student', 0, '002'),
-    ('004','Minister_of_Magic', 100000, '003'),
+    ('004','Minister_of_Magic', 150000, '003'),
     ('005','Caretaker', 50000, '001'),
     ('006','Gameskeeper', 75000, '001'),
-    ('007','Ghost', 0, '001'),
+    ('007','Ghost', 10000, '001'),
     ('008', 'Ministry_Worker', 75000, '003');
 
 INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
