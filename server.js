@@ -165,7 +165,7 @@ addDepartment = () => {
             // Insert new department into departments table
             db.query('INSERT INTO departments (name) VALUES (?)', response.name, function (err, results) {
                 if (err) throw err;
-                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Department added! Here is the updated table.');
+                console.log('\x1b[35m%s\x1b[0m','(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Department added! Here is the updated table.');
                 viewDepartments();
             });
         });
@@ -223,7 +223,7 @@ addRole = () => {
             // Insert new role into roles table
             db.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', [response.title, response.salary, response.department_id], function (err, results) {
                 if (err) throw err;
-                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Role added! Here is the updated table.');
+                console.log('\x1b[33m%s\x1b[0m'+'(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Role added! Here is the updated table.');
                 viewRoles();
             });
         });
@@ -294,7 +294,7 @@ addEmployee = () => {
             // Insert new employee into employees table
             db.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [response.first_name, response.last_name, response.role_id, response.manager_id], function (err, results) {
                 if (err) throw err;
-                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Employee added! Here is the updated table.');
+                console.log('\x1b[32m%s\x1b[0m'+'(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Employee added! Here is the updated table.');
                 viewEmployees();
             });
         })
@@ -342,7 +342,7 @@ updateEmployee = () => {
             // Update employee in employees table
             db.query('UPDATE employees SET role_id = ? WHERE id = ?', [response.role_id, response.employee_id], function (err, results) {
                 if (err) throw err;
-                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Employee updated! Here is the updated table.');
+                console.log('\x1b[31m%s\x1b[0m'+'(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Employee updated! Here is the updated table.');
                 viewEmployees();
             });
         });
@@ -436,7 +436,7 @@ deleteDepartment = () => {
             // Delete department from departments table
             db.query('DELETE FROM departments WHERE id = ?', response.id, function (err, results) {
                 if (err) throw err;
-                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Department deleted! Here is the updated table.');
+                console.log('\x1b[34m%s\x1b[0m'+'(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Department deleted! Here is the updated table.');
                 viewDepartments();
             });
         });
@@ -467,7 +467,7 @@ deleteRole = () => {
             // Delete role from roles table
             db.query('DELETE FROM roles WHERE id = ?', response.id, function (err, results) {
                 if (err) throw err;
-                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Role deleted! Here is the updated table.');
+                console.log('\x1b[36m%s\x1b[0m'+'(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Role deleted! Here is the updated table.');
                 viewRoles();
             });
         });
@@ -498,7 +498,7 @@ deleteEmployee = () => {
             // Delete employee from employees table
             db.query('DELETE FROM employees WHERE id = ?', response.id, function (err, results) {
                 if (err) throw err;
-                console.log('(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Employee deleted! Here is the updated table.');
+                console.log('\x1b[33m%s\x1b[0m'+'(∩ᵔ ᵕ ᵔ)⊃━☆ﾟ.*+.'+' Employee deleted! Here is the updated table.');
                 viewEmployees();
             });
         });
