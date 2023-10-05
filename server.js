@@ -29,6 +29,10 @@ console.log(
     .center(longText)
     .render()
 );
+// can use package.json to create logo, using default preferences instead, by using following code to replace above code:
+// const logo = require('asciiart-logo');
+// const config = require('./package.json');
+// console.log(logo(config).render());
 
 // set up port
 const PORT = process.env.PORT || 3001;
