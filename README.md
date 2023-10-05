@@ -18,7 +18,7 @@ To install the app, clone the repo and run `npm install` to install the dependen
 
 ## Usage
 After installing the dependencies by running `npm install`, run `node server.js` to start the app. Then, select an option from the main menu using the keyboard arrows. The user can view, add, and delete employees, roles, and departments, and update employee roles. The user can also view the total utilized budget of a department, which is the combined salaries of all employees in that department.
-[Watch the run-through video](https://drive.google.com/file/d/1dCu4zTDFILa0Zq21yPsj-7cryJSj47aJ/view)
+[Watch the walk-through video](https://drive.google.com/file/d/1TFGFSzI1cPNX1knYc9nwz1_sBq1CEn5I/view)
 
 ## Credits
 - Inquirer NPM package documentation: 
